@@ -2,6 +2,8 @@
 
 > task web application
 
+task api 를 이용한 작업 관리 앱 프로젝트
+
 ## Build Setup
 
 ``` bash
