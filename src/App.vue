@@ -20,14 +20,14 @@ export default {
 	},
 	methods: {
 		addTask(task) {
-			alert("called addTask" + task);
+			alert("called addTask " + task);
 		},
 		clearAll() {
 			alert("called clearAll");
 		},
 		removeTask(task) {
 			alert("called removeTask");
-		}
+		},
 	},
 	components: {
 		'Header': Header,
