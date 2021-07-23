@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <Header></Header>
+        <Header v-on:getAccessTokenHandler="getAccessTokenHandler"></Header>
         <Input v-on:addTask="addTask"></Input>
         <List v-bind:propsdata="taskList" @removeTask="removeTask"></List>
         <Footer v-on:removeAll="clearAll"></Footer>
@@ -27,6 +27,12 @@ export default {
 		},
 		removeTask(task) {
 			alert("called removeTask");
+		},
+		getAccessTokenHandler(userInfo) {
+			if (userInfo !== null) {
+				var string = `email = ${userInfo.email}\nname = ${userInfo.name}\naccessToken=${userInfo.accessToken}`
+				alert(string)
+			}
 		},
 	},
 	components: {
