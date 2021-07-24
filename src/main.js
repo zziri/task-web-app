@@ -8,7 +8,7 @@ import GAuth from 'vue-google-oauth2'
 Vue.config.productionTip = false
 
 const gauthOption = {
-  clientId: '271316964035-sn0br66c6578r9c1l4jbc3qf8ahokks4.apps.googleusercontent.com',
+  clientId: '916082187872-gj3lhe9p69baas05acm3l62d9b3dnv5q.apps.googleusercontent.com',
   scope: 'profile email',
   prompt: 'select_account'
 }
