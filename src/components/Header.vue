@@ -2,7 +2,7 @@
     <header>
         <h1>Make Your Tasks</h1>
         <div class="googleLoginContainer">
-            <span class="googleLoginBtn" @click="googleLogin">Google Login</span>
+            <span class="googleLoginBtn" @click="googleLoginHandler">Google Login</span>
         </div>
         <section><ul></ul></section>
     </header>
@@ -11,8 +11,8 @@
 <script>
 export default {
     methods: {
-        googleLogin() {
-            alert("clicked Google Login")
+        googleLoginHandler() {
+            console.log("clicked Google Login")
             var userInfo = new Object()
             this.$gAuth.signIn()
             .then((result) => {
@@ -20,9 +20,9 @@ export default {
                 userInfo.name = result.Ts.Me
                 userInfo.accessToken = result.Zb.access_token
                 if (this.$gAuth.isAuthorized) {
-                    this.$emit('getAccessTokenHandler', userInfo);
+                    this.$emit('googleLogin', userInfo);
                 } else {
-                    this.$emit('getAccessTokenHandler', null);
+                    this.$emit('googleLogin', null);
                 }
             })
         }

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <Header v-on:getAccessTokenHandler="getAccessTokenHandler"></Header>
+        <Header v-on:googleLogin="googleLogin"></Header>
         <Input v-on:addTask="addTask"></Input>
         <List v-bind:propsdata="taskList" @removeTask="removeTask"></List>
         <Footer v-on:removeAll="clearAll"></Footer>
@@ -12,37 +12,110 @@ import Header from './components/Header.vue'
 import Input from './components/Input.vue'
 import List from './components/List.vue'
 import Footer from './components/Footer.vue'
+import axios from 'axios'
+
 export default {
 	data() {
 		return {
-			taskList: []
+			taskList: [],
+			accessToken: "",
+			jwt: ""
 		}
 	},
+
 	methods: {
-		addTask(task) {
-			alert("called addTask " + task);
+		async addTask(taskTitle) {
+			var response = await this.createTaskRequest(taskTitle)
+			var task = response.data.data
+			this.taskList.push(task)
 		},
+
 		clearAll() {
-			alert("called clearAll");
+			console.log("called clearAll()")
 		},
-		removeTask(task) {
-			alert("called removeTask");
+
+		async removeTask(task, index) {
+			var response = await this.deleteTaskRequest(task.id)
+			console.log(response)
+			this.taskList.splice(index, 1);
 		},
-		getAccessTokenHandler(userInfo) {
+
+		async googleLogin(userInfo) {
 			if (userInfo !== null) {
-				var string = `email = ${userInfo.email}\nname = ${userInfo.name}\naccessToken=${userInfo.accessToken}`
-				alert(string)
+				this.accessToken = userInfo.accessToken
+				var response = await this.signInRequest()
+				console.log(`googleLogin request\n${response}`)
+				this.taskList = await this.getTasks()
+				console.log(`taskList = ${JSON.stringify(this.taskList)}`)
 			}
 		},
+
+		signInRequest() {
+			return axios({
+				url: 'https://task.zziri.me/v2/auth/google?accessToken=' + this.accessToken,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				method: 'POST'
+			})
+			.then((response) => {
+				this.jwt = response.data.data
+				console.log("jwt = " + this.jwt)
+				return response
+			})
+		},
+
+		createTaskRequest(taskTitle) {
+			return axios({
+				url: 'https://task.zziri.me/v2/tasks',
+				headers: {
+					'Content-Type': 'application/json',
+					'Task-Authentication': this.jwt
+				},
+				method: 'POST',
+				data: {
+					title: taskTitle
+				}
+			})
+		},
+
+		async getTasks() {
+			var response = await this.getTasksReqeust()
+			return response.data.data
+		},
+
+		getTasksReqeust() {
+			return axios({
+				url: 'https://task.zziri.me/v2/tasks',
+				headers: {
+					'Content-Type': 'application/json',
+					'Task-Authentication': this.jwt
+				},
+				method: 'GET'
+			})
+		},
+
+		deleteTaskRequest(id) {
+			return axios({
+				url: 'https://task.zziri.me/v2/tasks/' + id,
+				headers: {
+					'Content-Type': 'application/json',
+					'Task-Authentication': this.jwt
+				},
+				method: 'DELETE'
+			})
+		}
 	},
+
 	components: {
 		'Header': Header,
 		'Input': Input,
 		'List': List,
 		'Footer': Footer
 	},
+	
 	created() {
-		alert("call created");
+		console.log("call created()")
 	}
 }
 </script>
