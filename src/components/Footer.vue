@@ -1,11 +1,12 @@
 <template>
-    <div class="clearAllContainer">
+    <div v-if="isAuthorized" class="clearAllContainer">
         <span class="clearAllBtn" @click="clearTask">Clear All</span>
     </div>
 </template>
 
 <script>
 export default {
+    props: ['isAuthorized'],
     methods: {
         clearTask() {
             this.$emit('removeAll');

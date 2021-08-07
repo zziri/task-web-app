@@ -1,7 +1,7 @@
 <template>
     <header>
         <h1>Make Your Tasks</h1>
-        <div class="googleLoginContainer">
+        <div class="googleLoginContainer" v-if="isAuthorized === false">
             <span class="googleLoginBtn" @click="googleLoginHandler">Google Login</span>
         </div>
         <section><ul></ul></section>
@@ -10,6 +10,7 @@
 
 <script>
 export default {
+    props: ['isAuthorized'],
     methods: {
         googleLoginHandler() {
             console.log("clicked Google Login")

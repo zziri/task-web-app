@@ -1,9 +1,9 @@
 <template>
     <div id="app">
-        <Header v-on:googleLogin="googleLogin"></Header>
-        <Input v-on:addTask="addTask"></Input>
-        <List v-bind:propsdata="taskList" @removeTask="removeTask"></List>
-        <Footer v-on:removeAll="clearAll"></Footer>
+        <Header v-on:googleLogin="googleLogin" v-bind:isAuthorized="isAuthorized"></Header>
+        <Input v-on:addTask="addTask" v-bind:isAuthorized="isAuthorized"></Input>
+        <List v-bind:propsList="taskList" @removeTask="removeTask" v-bind:isAuthorized="isAuthorized"></List>
+        <Footer v-on:removeAll="clearAll" v-bind:isAuthorized="isAuthorized"></Footer>
     </div>
 </template>
 
@@ -19,7 +19,8 @@ export default {
 		return {
 			taskList: [],
 			accessToken: "",
-			jwt: ""
+			jwt: "",
+			isAuthorized: false,
 		}
 	},
 
@@ -30,14 +31,19 @@ export default {
 			this.taskList.push(task)
 		},
 
-		clearAll() {
-			console.log("called clearAll()")
+		async clearAll() {
+			for (var i=0; i<this.taskList.length; i++) {
+				var response = await this.deleteTaskRequest(this.taskList[i].id)
+				console.log(response)
+			}
+			this.taskList = []
 		},
 
 		async removeTask(task, index) {
 			var response = await this.deleteTaskRequest(task.id)
 			console.log(response)
 			this.taskList.splice(index, 1);
+			return true
 		},
 
 		async googleLogin(userInfo) {
@@ -47,6 +53,7 @@ export default {
 				console.log(`googleLogin request\n${response}`)
 				this.taskList = await this.getTasks()
 				console.log(`taskList = ${JSON.stringify(this.taskList)}`)
+				this.isAuthorized = true
 			}
 		},
 
@@ -135,4 +142,10 @@ export default {
     .shadow {
         box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.03)
     }
+	#app {
+		height: 100%;
+		max-width: 70%;
+		min-width: 70%;
+		display: inline-block;
+	}
 </style>

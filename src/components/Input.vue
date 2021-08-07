@@ -1,5 +1,5 @@
 <template>
-    <div class="inputBox shadow">
+    <div v-if="isAuthorized" class="inputBox shadow">
         <input type="text" v-model="newTaskItem" placeholder="Type what you have to do" v-on:keyup.enter="addTask">
         <span class="addContainer" v-on:click="addTask">
             <i class="addBtn fas fa-plus" aria-hidden="true"></i>
@@ -9,6 +9,7 @@
 
 <script>
 export default {
+    props: ['isAuthorized'],
     data() {
         return {
             newTaskItem: ''
@@ -46,7 +47,7 @@ export default {
     }
     .addContainer {
         float: right;
-        background: linear-gradient(to right, #6478FB, #8763FB);
+        background: linear-gradient(to right, #0d6efd, #0d6efd);
         display: block;
         width: 3rem;
         border-radius: 0 5px 5px 0;
