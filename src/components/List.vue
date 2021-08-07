@@ -1,7 +1,7 @@
 <template>
     <section>
         <transition-group name="list" tag="ul">
-            <li v-for="(task, index) in propsdata" class="shadow" :key="task">
+            <li v-for="(task, index) in propsList" class="shadow" :key="task">
                 <i class="checkBtn fas fa-check" aria-hidden="true"></i>
                 {{ task.title }}
                 <span class="removeBtn" type="button" @click="removeTask(task, index)">
@@ -14,7 +14,7 @@
 
 <script>
 export default {
-    props: ['propsdata'],
+    props: ['propsList', 'isAuthorized'],
     methods: {
         removeTask(task, index) {
             this.$emit('removeTask', task, index);
