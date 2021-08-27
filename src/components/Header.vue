@@ -19,7 +19,7 @@ export default {
             .then((result) => {
                 userInfo.email = result.Ts.Et
                 userInfo.name = result.Ts.Me
-                userInfo.accessToken = result.Zb.access_token
+                userInfo.accessToken = result.Xb.access_token
                 if (this.$gAuth.isAuthorized) {
                     this.$emit('googleLogin', userInfo);
                 } else {
