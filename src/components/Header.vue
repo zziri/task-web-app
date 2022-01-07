@@ -17,9 +17,9 @@ export default {
             var userInfo = new Object()
             this.$gAuth.signIn()
             .then((result) => {
-                userInfo.email = result.nt.Yt
-                userInfo.name = result.nt.Re
-                userInfo.accessToken = result.Zb.access_token
+                userInfo.email = result.getBasicProfile().getEmail();
+                userInfo.name = result.getBasicProfile().getName();
+                userInfo.accessToken = result.getAuthResponse().access_token;
                 if (this.$gAuth.isAuthorized) {
                     this.$emit('googleLogin', userInfo);
                 } else {
